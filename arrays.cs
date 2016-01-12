@@ -23,6 +23,36 @@ namespace ArrayTasks {
       return secondMax;
     }
 
+    public int isDaphne(int[] a) {
+      int len=a.Length, i=0, j=len-1, oddFound=0;
+      while(oddFound==0) {
+        if(a[i]%2==0 && a[j]%2==0) {
+          i++;
+          j--;
+          continue;
+        }
+        if(a[i]%2==0 && a[j]%2!=0) {
+          i++; oddFound=1;
+          continue;
+        }
+        if(a[i]%2!=0 && a[j]%2==0) {
+          j--; oddFound=1;
+          continue;
+        }
+        if(a[i]%2!=0 || a[j]%2!=0) {
+          oddFound=1;
+          continue;
+        }
+      }
+      if(oddFound==0) {
+        return 0;
+      } else if(i+1!=len-j){
+        return 0;
+      } else {
+        return 1;
+      }
+    }
+
     public int calculateNUpcount (int[] a, int n) {
       int upCount = 0, partialSum = 0, prevPartialSum;
       for (int i=0,length = a.Length; i<length; i++) {
@@ -63,44 +93,38 @@ namespace ArrayTasks {
       }
     }
 
-    public int checkInertial(int[] array) {
-      int max = array[0], length = array.Length, oddIndex=0, evenIndex = 0, countEven=0, countOdd=0;
-      //calculating length of odd and even numbers in array
-      for(int i = 0; i<length; i++) {
-        if(array[i]%2==0) {
-          countEven++;
-        } else {
-          countOdd++;
+    public int isMadhavArrayAnotherMethod (int[] a) {
+      int len=a.Length, n=0, numSatisfied =0;
+      //calculating n, n will be the times a[0] will be checked for sum
+      for(int i=0; i<len; i++) {
+        if(i*(i+1)/2 == len) {
+          n=i;
+          numSatisfied=1;
+          break;
         }
       }
 
-      int[] oddArray = new int[countOdd], evenArray = new int[countEven];
-      bool hasAtLeast1Odd = false, hasMaxValueEven = false, everyOddGreaterThanOtherEven = true;
-      for(int i = 0; i<length; i++) {
-        if(array[i]%2 == 1) {
-          hasAtLeast1Odd = true;
-          oddArray[oddIndex] = array[i];
-          oddIndex++;
-        } else if(array[i]%2 == 0){
-          evenArray[evenIndex] = array[i];
-          evenIndex++;
-        }
-        if(max<array[i]) {
-          max = array[i];
-        }
+      //if n is not satisfied by length return 0
+      if(numSatisfied == 0) {
+        return 0;
       }
-      if(max%2 == 0) {
-        hasMaxValueEven = true;
-      }
-      for(int i=0; i<countOdd; i++) {
-        for(int j =0; j<countEven; j++) {
-          if(oddArray[i] < evenArray[j] && evenArray[j] != max) {
-            everyOddGreaterThanOtherEven = false;
-          }
+
+      //keep a variable k for looping the sum and keep remembered
+      int k = 0;
+      //looping n times and checking if partial sum equals a[0]. Note a[0] is checked with a[0], a[1]+a[2], a[3]+a[4]+a[5], a[6]+a[7]+a[8]+a[9],... n times
+      for(int i=0; i<n; i++) {
+        int partSum = 0;
+        for(int j=0; j<i; j++) {
+          partSum += a[k];
+          k++;
+        }
+        if(partSum != a[0]) {
+          return 0;
         }
       }
-      return hasAtLeast1Odd && hasMaxValueEven && everyOddGreaterThanOtherEven ? 1 : 0;
+      return 1;
     }
+    
 
     public int countSquarePairs(int[] array) {
       int countPerfectSquarePair = 0;
@@ -532,6 +556,7 @@ namespace ArrayTasks {
 
       // Works by checking if current element exists before . if it does increase duplicate count
       /*
+      int count=0;
       for(int i=0; i<len; i++) {
         for(int j=0; j<i; j++) {
           if(i!=j && array[i]==array[j]) {
@@ -644,20 +669,20 @@ namespace ArrayTasks {
       // Console.WriteLine("Upcount for array3 should be 0 and is : {0}", secMax.calculateNUpcount(upCountArray3, 20));
       
       //MadhavArray
-      // int[] isMadhav1 = {2,1,1};
-      // int[] isMadhav2 = {2, 1, 1, 4, -1, -1};
-      // int[] isMadhav3 = {6, 2, 4, 2, 2, 2, 1, 5, 0, 0};
-      // int[] isMadhav4 = {18, 9, 10, 6, 6, 6};
-      // int[] isMadhav5 = {-6, -3, -3, 8, -5, -4};
-      // int[] isMadhav6 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, -2, -1};
-      // int[] isMadhav7 = {3,1,2,3,0};
-      // Console.WriteLine("Is Madhav Array 1 : {0}", secMax.isMadhavArray(isMadhav1));
-      // Console.WriteLine("Is Madhav Array 2 : {0}", secMax.isMadhavArray(isMadhav2));
-      // Console.WriteLine("Is Madhav Array 3 : {0}", secMax.isMadhavArray(isMadhav3));
-      // Console.WriteLine("Is Madhav Array 4 : {0}", secMax.isMadhavArray(isMadhav4));
-      // Console.WriteLine("Is Madhav Array 5 : {0}", secMax.isMadhavArray(isMadhav5));
-      // Console.WriteLine("Is Madhav Array 6 : {0}", secMax.isMadhavArray(isMadhav6));
-      // Console.WriteLine("Is Madhav Array 7 : {0}", secMax.isMadhavArray(isMadhav7));
+      int[] isMadhav1 = {2,1,1};
+      int[] isMadhav2 = {2, 1, 1, 4, -1, -1};
+      int[] isMadhav3 = {6, 2, 4, 2, 2, 2, 1, 5, 0, 0};
+      int[] isMadhav4 = {18, 9, 10, 6, 6, 6};
+      int[] isMadhav5 = {-6, -3, -3, 8, -5, -4};
+      int[] isMadhav6 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, -2, -1};
+      int[] isMadhav7 = {3,1,2,3,0};
+      Console.WriteLine("Is Madhav Array 1 : {0}", secMax.isMadhavArrayAnotherMethod(isMadhav1));
+      Console.WriteLine("Is Madhav Array 2 : {0}", secMax.isMadhavArrayAnotherMethod(isMadhav2));
+      Console.WriteLine("Is Madhav Array 3 : {0}", secMax.isMadhavArrayAnotherMethod(isMadhav3));
+      Console.WriteLine("Is Madhav Array 4 : {0}", secMax.isMadhavArrayAnotherMethod(isMadhav4));
+      Console.WriteLine("Is Madhav Array 5 : {0}", secMax.isMadhavArrayAnotherMethod(isMadhav5));
+      Console.WriteLine("Is Madhav Array 6 : {0}", secMax.isMadhavArrayAnotherMethod(isMadhav6));
+      Console.WriteLine("Is Madhav Array 7 : {0}", secMax.isMadhavArrayAnotherMethod(isMadhav7));
 
 
       //inertial
@@ -810,8 +835,8 @@ namespace ArrayTasks {
       // Console.WriteLine(secMax.findUnique(arrayToSort));
       
       //cound duplicates
-      int[] arrayWithDuplicates = {1,2,3,5,3,0,2,1,1,1};
-      secMax.countDuplicates(arrayWithDuplicates);
+      // int[] arrayWithDuplicates = {1,2,3,5,3,0,2,1,1,1};
+      // secMax.countDuplicates(arrayWithDuplicates);
     }
   }
 }

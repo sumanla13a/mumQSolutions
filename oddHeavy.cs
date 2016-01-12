@@ -36,6 +36,23 @@ namespace oddHeavy {
       return 1;
     }
 
+    public int isOddHeavyInOneLoop(int[] a) {
+      int len = a.Length, oddFound=0;
+      for(int i=0; i<len; i++) {
+        if(a[i]%2!=0) {
+          oddFound=1;
+        }
+        for(int j=0; j<len; j++) {
+          if(a[i]%2!=0 && a[j]%2==0) {
+              if(a[i]<a[j]) {
+                  return 0;
+              }
+          }
+        }
+      }
+      return oddFound == 1? 1: 0;
+    }
+
     public static void Main(string[] args) {
       int[] array = {11, 4, 9, 2, 8};
       oddHeavy oddObj = new oddHeavy();

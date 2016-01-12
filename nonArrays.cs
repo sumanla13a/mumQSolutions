@@ -2,9 +2,14 @@ using System;
 namespace ValueTasks {
   class Mathematics {
     public int nextPerfectSquare (int givenValue) {
-      int currentSquare;
-      currentSquare = (int)Math.Sqrt(givenValue);
-      return (currentSquare + 1) * (currentSquare + 1);
+      int currentSquare, sum=0, i=0;
+      // currentSquare = (int)Math.Sqrt(givenValue);
+      while(sum<givenValue) {
+        sum+=i*i;
+        i++;
+      }
+      return sum;
+      // return (currentSquare + 1) * (currentSquare + 1);
     }
     public int countPrime(int start, int end) {
       int primeCount = 0, currentValue = start;
@@ -183,32 +188,30 @@ namespace ValueTasks {
       return 0;
     }
 
-    public int checkAllDigits (int[] array) {
-      for(int i = 0, len = array.Length; i<len; i++) {
-        if(array[i] == 0) {
-          return 0;
-        }
+    public int checkAllDigit(int[] array) {
+      //returns 1 if all values are 1. thus keeping the index of each digits
+      int count = 0;
+      for(int i=0, len=array.Length; i<len; i++) {
+        if(array[i] == 1)
+          count++;
       }
-      return 1;
+      return count==10? 1: 0;
     }
-    // public int hasDigit(int n) {
-    //   for(int i = 0; i<=9; i++) {
-
-    //   }
-    // }
     public int countDepth(int n) {
-      int[] digits = new int[10];
-      int multiplier =1, value = 0;
-      while(checkAllDigits(digits) == 0) {
-        value = multiplier * n;
-        for(int i = 0; i < 10; i++) {
-          if(value.ToString().IndexOf(i.ToString()) > -1) {
-            digits[i] = 1;
-          }
+      int val = n, i=0;
+      int[] digitIndex = new int[10];
+      while(checkAllDigit(digitIndex) != 1) {
+        i++;
+        val = n * i;
+        int temp = val;
+        //checking and adding digits to the indexed array
+        while(temp!=0) {
+          int digit = temp%10;
+          digitIndex[digit] = 1;
+          temp = temp/10;
         }
-        multiplier++;
       }
-      return multiplier-1;
+      return i;
     }
 
     public int isStacked (int n) {
